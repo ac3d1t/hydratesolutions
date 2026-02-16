@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>hydrate solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --glass: rgba(255,255,255,0.18);
+      --glass-border: rgba(255,255,255,0.35);
+      --glass-shadow: rgba(0,0,0,0.12);
+      --glass-blur: blur(24px) saturate(180%);
+      --text: #1a2a3a;
+      --muted: rgba(26,42,58,0.5);
+      --accent: #2196f3;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 20% 20%, #c5e8ff 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 10%, #b8d8ff 0%, transparent 45%),
+                  radial-gradient(ellipse at 60% 80%, #d0eeff 0%, transparent 50%),
+                  #ddeeff;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      border-radius: 28px;
+      margin-bottom: 1.2rem;
+      position: relative;
+      z-index: 100; 
+      overflow: visible !important; 
+    }
+
+    .brand { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; }
+    .brand-email { font-size: 0.72rem; color: var(--muted); }
+
+    .book-btn {
+      background: rgba(33,150,243,0.15);
+      border: 1px solid rgba(33,150,243,0.3);
+      color: #1565c0;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .book-btn svg { width: 12px; height: 12px; transition: transform 0.2s; }
+    .book-btn.open svg { transform: rotate(180deg); }
+
+    /* ── THE DROPDOWN FIX ── */
+    .book-dropdown {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      min-width: 250px;
+      border-radius: 24px;
+      padding: 0.8rem;
+      z-index: 1000;
+      
+      /* Frosting effect to hide text behind */
+      background: rgba(255, 255, 255, 0.88); 
+      backdrop-filter: blur(45px) saturate(200%);
+      -webkit-backdrop-filter: blur(45px) saturate(200%);
+      
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .book-dropdown.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+
+    .book-option {
+      padding: 0.8rem 1rem;
+      border-radius: 16px;
+      font-size: 0.82rem;
+      color: var(--text);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 0.7rem;
+      text-decoration: none;
+    }
+    .book-option:hover { background: rgba(33, 150, 243, 0.08); }
+    .book-option-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    /* ── PACKAGES GRID ── */
+    .section-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: var(--muted); margin: 1.5rem 0 0.9rem 0.3rem; letter-spacing: 0.14em; }
+    .packages-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .package-card { border-radius: 26px; overflow: hidden; position: relative; }
+    .package-card:nth-child(3) { grid-column: 1 / -1; }
+
+    .pkg-img { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); }
+    .package-card:nth-child(3) .pkg-img { aspect-ratio: 16/7; }
+    .pkg-info { padding: 1.1rem; border-top: 1px solid rgba(255,255,255,0.3); }
+    .pkg-top { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; }
+    .pkg-price { color: #1565c0; }
+    .pkg-desc { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+
+    /* ── SAZZAD / AURORA STYLES ── */
+    .sazzad-card { position: relative; background: rgba(255,255,255,0.25); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.4); }
+    .sazzad-bg { position: absolute; inset: 6px; background: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(245,245,245,0.6)); border-radius: 14px; z-index: 1; pointer-events: none; }
+    .sazzad-aurora { position: absolute; top: 50%; left: 50%; width: 200px; height: 200px; border-radius: 50%; filter: blur(40px); z-index: 0; animation: aurora-move 10s infinite alternate; opacity: 0.5; }
+    
+    .aurora-sky .sazzad-aurora { background: radial-gradient(circle, #82caff, #e0f2ff, transparent); }
+    .aurora-teal .sazzad-aurora { background: radial-gradient(circle, #8df5e8, #e0fffb, transparent); }
+    .sazzad-content { position: relative; z-index: 2; width: 100%; }
+
+    @keyframes aurora-move { 0% { transform: translate(-50%, -50%) scale(1); } 100% { transform: translate(-30%, -40%) scale(1.2); } }
+
+    .footer { text-align: center; margin-top: 3rem; font-size: 0.7rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header class="header sazzad-card aurora-sky">
+    <div class="sazzad-aurora"></div>
+    <div class="sazzad-bg"></div>
+    <div class="sazzad-content" style="display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2rem;">
+      <div>
+        <div class="brand">hydrate solutions</div>
+        <div class="brand-email">info@hydratesolutions.com</div>
+      </div>
+      <div style="position:relative;">
+        <button class="book-btn" id="bookBtn">
+          book appointment
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="book-dropdown" id="bookDropdown">
+          <a href="tel:3052835447" class="book-option">
+            <div class="book-option-dot"></div>
+            call us · 305-283-5447
+          </a>
+          <a href="mailto:info@hydratesolutions.com" class="book-option">
+            <div class="book-option-dot"></div>
+            email us
+          </a>
+          <div class="book-option">
+            <div class="book-option-dot"></div>
+            schedule online
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="sazzad-card aurora-teal" style="border-radius: 24px; margin-bottom: 1.2rem;">
+    <div class="sazzad-aurora"></div>
+    <div class="sazzad-bg"></div>
+    <div class="sazzad-content" style="padding:1.8rem 2rem; font-size: 0.95rem; line-height: 1.7;">
+      Professional wellness and hydration services. Our mission is to restore your vitality and performance through science-backed protocols.
+    </div>
+  </section>
+
+  <div class="section-label">packages</div>
+
+  <div class="packages-grid">
+    <div class="package-card sazzad-card">
+      <div class="sazzad-bg"></div>
+      <div class="sazzad-content">
+        <div class="pkg-img">BASIC</div>
+        <div class="pkg-info">
+          <div class="pkg-top"><span>package 1</span><span class="pkg-price">$59</span></div>
+          <div class="pkg-desc">Essential hydration for everyday wellness.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="package-card sazzad-card">
+      <div class="sazzad-bg"></div>
+      <div class="sazzad-content">
+        <div class="pkg-img">PREMIUM</div>
+        <div class="pkg-info">
+          <div class="pkg-top"><span>package 2</span><span class="pkg-price">$79</span></div>
+          <div class="pkg-desc">Enhanced recovery for athletes and performance.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="package-card sazzad-card">
+      <div class="sazzad-bg"></div>
+      <div class="sazzad-content">
+        <div class="pkg-img">COMPLETE</div>
+        <div class="pkg-info">
+          <div class="pkg-top"><span>package 3</span><span class="pkg-price">$129</span></div>
+          <div class="pkg-desc">The ultimate wellness program for total body restoration.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">hydrate solutions · 305-283-5447</footer>
+</div>
+
+<script>
+  const btn = document.getElementById('bookBtn');
+  const menu = document.getElementById('bookDropdown');
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+
+  document.addEventListener('click', () => {
+    btn.classList.remove('open');
+    menu.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
