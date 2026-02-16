@@ -9,10 +9,6 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --glass: rgba(255,255,255,0.18);
-      --glass-border: rgba(255,255,255,0.35);
-      --glass-shadow: rgba(0,0,0,0.12);
-      --glass-blur: blur(24px) saturate(180%);
       --text: #1a2a3a;
       --muted: rgba(26,42,58,0.5);
       --accent: #2196f3;
@@ -21,122 +17,261 @@
     body {
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 20% 20%, #c5e8ff 0%, transparent 50%),
-                  radial-gradient(ellipse at 80% 10%, #b8d8ff 0%, transparent 45%),
-                  radial-gradient(ellipse at 60% 80%, #d0eeff 0%, transparent 50%),
-                  #ddeeff;
+      background:
+        radial-gradient(ellipse at 20% 20%, #c5e8ff 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 10%, #b8d8ff 0%, transparent 45%),
+        radial-gradient(ellipse at 60% 80%, #d0eeff 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 90%, #c0e0ff 0%, transparent 40%),
+        #ddeeff;
       color: var(--text);
       overflow-x: hidden;
     }
 
+    .blob { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.4; pointer-events: none; z-index: 0; animation: blobFloat 10s ease-in-out infinite; }
+    .blob1 { width: 500px; height: 500px; background: rgba(100,180,255,0.35); top: -150px; left: -150px; }
+    .blob2 { width: 350px; height: 350px; background: rgba(150,220,255,0.3); top: 40%; right: -100px; animation-delay: 3s; }
+    .blob3 { width: 400px; height: 400px; background: rgba(180,235,255,0.25); bottom: -100px; left: 20%; animation-delay: 6s; }
+    @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(20px,-25px) scale(1.04)} 66%{transform:translate(-12px,12px) scale(0.97)} }
+
     .container {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
+      padding: 2rem 1.2rem 5rem;
       position: relative;
       z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    /* ── HEADER ── */
-    .header {
-      border-radius: 28px;
-      margin-bottom: 1.2rem;
+    /* ── card base ── */
+    .card {
       position: relative;
-      z-index: 100; 
-      overflow: visible !important; 
+      border-radius: 26px;
+      overflow: visible;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255,255,255,0.45);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.6);
     }
 
-    .brand { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; }
-    .brand-email { font-size: 0.72rem; color: var(--muted); }
+    .card-inner {
+      position: absolute;
+      inset: 5px;
+      border-radius: 21px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.82), rgba(245,248,255,0.55));
+      border: 1px solid rgba(255,255,255,0.7);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .card-aurora {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      filter: blur(45px);
+      z-index: 0;
+      opacity: 0.45;
+      pointer-events: none;
+      animation: auroraMove 9s infinite ease-in-out;
+    }
+
+    .aurora-sky .card-aurora    { background: radial-gradient(circle, #90d4ff, #c8ecff, transparent); }
+    .aurora-teal .card-aurora   { background: radial-gradient(circle, #80f0e0, #c0fff8, transparent); }
+    .aurora-blue .card-aurora   { background: radial-gradient(circle, #80b4ff, #c0d8ff, transparent); }
+    .aurora-indigo .card-aurora { background: radial-gradient(circle, #a0a8ff, #d0d4ff, transparent); }
+    .aurora-mint .card-aurora   { background: radial-gradient(circle, #80e8c0, #c0f8e8, transparent); }
+    .aurora-rose .card-aurora   { background: radial-gradient(circle, #ffb0c8, #ffd8e8, transparent); }
+
+    @keyframes auroraMove {
+      0%,100% { transform: translate(-55%,-55%) scale(1); }
+      35% { transform: translate(-30%,-40%) scale(1.18); }
+      70% { transform: translate(-65%,-35%) scale(1.05); }
+    }
+
+    .card-content { position: relative; z-index: 2; width: 100%; }
+
+    /* ── header ── */
+    .header { overflow: visible !important; z-index: 100; }
+    .header .card-content {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.8rem; padding: 1.6rem 2rem;
+    }
+
+    .brand { font-family: 'Playfair Display', serif; font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+    .brand-email { font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem; }
 
     .book-btn {
       background: rgba(33,150,243,0.15);
-      border: 1px solid rgba(33,150,243,0.3);
+      border: 1px solid rgba(33,150,243,0.35);
+      backdrop-filter: blur(12px);
       color: #1565c0;
-      padding: 0.6rem 1.2rem;
-      border-radius: 50px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-weight: 500;
-      transition: 0.2s;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.76rem; font-weight: 500;
+      padding: 0.55rem 1.1rem; border-radius: 50px; cursor: pointer;
+      white-space: nowrap; transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 0.35rem;
+      position: relative;
     }
-
-    .book-btn svg { width: 12px; height: 12px; transition: transform 0.2s; }
+    .book-btn:hover { background: rgba(33,150,243,0.22); transform: translateY(-1px); }
+    .book-btn svg { width: 11px; height: 11px; transition: transform 0.2s ease; flex-shrink: 0; }
     .book-btn.open svg { transform: rotate(180deg); }
 
-    /* ── THE DROPDOWN FIX ── */
     .book-dropdown {
-      position: absolute;
-      top: calc(100% + 12px);
-      right: 0;
-      min-width: 250px;
-      border-radius: 24px;
-      padding: 0.8rem;
-      z-index: 1000;
-      
-      /* Frosting effect to hide text behind */
-      background: rgba(255, 255, 255, 0.88); 
-      backdrop-filter: blur(45px) saturate(200%);
-      -webkit-backdrop-filter: blur(45px) saturate(200%);
-      
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      opacity: 0;
-      transform: translateY(-10px) scale(0.95);
-      pointer-events: none;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: absolute; top: calc(100% + 10px); right: 0;
+      min-width: 240px; border-radius: 22px; padding: 0.6rem; z-index: 9999;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.14);
+      opacity: 0; transform: translateY(-8px) scale(0.96);
+      pointer-events: none; transition: all 0.28s cubic-bezier(0.16,1,0.3,1);
     }
-
     .book-dropdown.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
 
     .book-option {
-      padding: 0.8rem 1rem;
-      border-radius: 16px;
-      font-size: 0.82rem;
-      color: var(--text);
-      cursor: pointer;
-      display: flex; align-items: center; gap: 0.7rem;
-      text-decoration: none;
+      padding: 0.75rem 1rem; border-radius: 14px; font-size: 0.78rem; color: var(--text);
+      cursor: pointer; display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; transition: background 0.15s ease;
     }
-    .book-option:hover { background: rgba(33, 150, 243, 0.08); }
-    .book-option-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .book-option:hover { background: rgba(33,150,243,0.08); }
+    .book-option-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
-    /* ── PACKAGES GRID ── */
-    .section-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: var(--muted); margin: 1.5rem 0 0.9rem 0.3rem; letter-spacing: 0.14em; }
-    .packages-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .package-card { border-radius: 26px; overflow: hidden; position: relative; }
-    .package-card:nth-child(3) { grid-column: 1 / -1; }
+    /* ── bio ── */
+    .bio .card-content { padding: 1.6rem 2rem; font-size: 0.9rem; line-height: 1.75; color: rgba(26,42,58,0.72); }
 
-    .pkg-img { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); }
-    .package-card:nth-child(3) .pkg-img { aspect-ratio: 16/7; }
-    .pkg-info { padding: 1.1rem; border-top: 1px solid rgba(255,255,255,0.3); }
-    .pkg-top { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; }
-    .pkg-price { color: #1565c0; }
-    .pkg-desc { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+    /* ── contact card ── */
+    .contact-card .card-content {
+      padding: 1.4rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .contact-title { font-size: 0.88rem; font-weight: 600; }
+    .contact-sub { font-size: 0.66rem; color: var(--muted); margin-top: 0.15rem; }
+    .contact-btns { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 
-    /* ── SAZZAD / AURORA STYLES ── */
-    .sazzad-card { position: relative; background: rgba(255,255,255,0.25); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.4); }
-    .sazzad-bg { position: absolute; inset: 6px; background: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(245,245,245,0.6)); border-radius: 14px; z-index: 1; pointer-events: none; }
-    .sazzad-aurora { position: absolute; top: 50%; left: 50%; width: 200px; height: 200px; border-radius: 50%; filter: blur(40px); z-index: 0; animation: aurora-move 10s infinite alternate; opacity: 0.5; }
-    
-    .aurora-sky .sazzad-aurora { background: radial-gradient(circle, #82caff, #e0f2ff, transparent); }
-    .aurora-teal .sazzad-aurora { background: radial-gradient(circle, #8df5e8, #e0fffb, transparent); }
-    .sazzad-content { position: relative; z-index: 2; width: 100%; }
+    .contact-btn {
+      padding: 0.5rem 1rem; border-radius: 50px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 500; cursor: pointer; text-decoration: none;
+      display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s ease; border: none;
+    }
+    .contact-btn.call { background: rgba(33,150,243,0.15); border: 1px solid rgba(33,150,243,0.35); color: #1565c0; }
+    .contact-btn.call:hover { background: rgba(33,150,243,0.25); transform: translateY(-1px); }
+    .contact-btn.email { background: rgba(80,200,160,0.15); border: 1px solid rgba(80,200,160,0.35); color: #1a6c50; }
+    .contact-btn.email:hover { background: rgba(80,200,160,0.25); transform: translateY(-1px); }
+    .contact-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-    @keyframes aurora-move { 0% { transform: translate(-50%, -50%) scale(1); } 100% { transform: translate(-30%, -40%) scale(1.2); } }
+    /* ── collapsible sections ── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; padding: 1.3rem 1.8rem; user-select: none;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-count { font-size: 0.62rem; color: var(--muted); margin-top: 0.1rem; }
 
-    .footer { text-align: center; margin-top: 3rem; font-size: 0.7rem; color: var(--muted); }
+    .section-chevron {
+      width: 22px; height: 22px;
+      background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), background 0.2s;
+    }
+    .section-chevron svg { width: 10px; height: 10px; color: var(--muted); }
+    .section-open .section-chevron { transform: rotate(180deg); background: rgba(33,150,243,0.12); }
+
+    .section-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .section-open .section-body { max-height: 4000px; }
+
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); margin: 0 1.5rem; }
+
+    /* ── packages grid ── */
+    .pkg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 0.8rem;
+      padding: 1rem 1.2rem 1.4rem;
+    }
+
+    .pkg-card {
+      border-radius: 20px; overflow: hidden;
+      background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.5);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease;
+      cursor: default;
+    }
+    .pkg-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.1); }
+
+    .pkg-img {
+      aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.35rem;
+    }
+    .pkg-img-label { font-size: 0.52rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(26,42,58,0.35); }
+
+    .pkg-info { padding: 0.8rem 0.9rem; border-top: 1px solid rgba(255,255,255,0.35); }
+    .pkg-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; }
+    .pkg-name { font-size: 0.76rem; font-weight: 600; }
+    .pkg-price { font-size: 0.76rem; font-weight: 600; color: #1565c0; }
+    .pkg-desc { font-size: 0.62rem; color: var(--muted); line-height: 1.4; }
+
+    .pkg-detail-row { display: flex; align-items: center; gap: 0.25rem; margin-top: 0.45rem; cursor: pointer; }
+    .pkg-detail-label { font-size: 0.58rem; color: rgba(33,150,243,0.8); font-weight: 500; }
+    .pkg-detail-arrow { width: 9px; height: 9px; color: rgba(33,150,243,0.8); transition: transform 0.25s ease; }
+    .pkg-detail-arrow.open { transform: rotate(180deg); }
+
+    .pkg-detail-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease; opacity: 0; }
+    .pkg-detail-body.open { max-height: 200px; opacity: 1; }
+
+    .pkg-detail-inner { padding-top: 0.55rem; border-top: 1px solid rgba(255,255,255,0.35); margin-top: 0.45rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .pkg-detail-item { display: flex; gap: 0.4rem; align-items: flex-start; font-size: 0.59rem; color: var(--muted); line-height: 1.35; }
+    .pkg-bullet { width: 3px; height: 3px; border-radius: 50%; background: var(--accent); margin-top: 0.42em; flex-shrink: 0; }
+
+    /* ── peptides grid ── */
+    .peptide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.6rem;
+      padding: 1rem 1.2rem 1.4rem;
+    }
+    .peptide-card {
+      border-radius: 16px; background: rgba(255,255,255,0.28);
+      border: 1px solid rgba(255,255,255,0.5); padding: 0.85rem 0.8rem;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+      transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s;
+    }
+    .peptide-card:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(0,0,0,0.09); }
+    .peptide-name { font-size: 0.72rem; font-weight: 600; margin-bottom: 0.12rem; }
+    .peptide-use { font-size: 0.58rem; color: var(--muted); line-height: 1.35; margin-bottom: 0.35rem; }
+    .peptide-price { font-size: 0.7rem; font-weight: 600; color: #1565c0; }
+
+    /* ── footer ── */
+    .footer { text-align: center; font-size: 0.65rem; color: var(--muted); padding-top: 0.5rem; }
+
+    /* ── responsive ── */
+    @media (max-width: 480px) {
+      .container { padding: 1.2rem 0.8rem 4rem; }
+      .header .card-content { padding: 1.2rem 1.4rem; }
+      .brand { font-size: 1.35rem; }
+      .pkg-grid { grid-template-columns: 1fr 1fr; }
+      .peptide-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+      .contact-card .card-content { flex-direction: column; align-items: flex-start; }
+    }
   </style>
 </head>
 <body>
 
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
 <div class="container">
-  <header class="header sazzad-card aurora-sky">
-    <div class="sazzad-aurora"></div>
-    <div class="sazzad-bg"></div>
-    <div class="sazzad-content" style="display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2rem;">
+
+  <!-- header -->
+  <div class="card header aurora-sky">
+    <div class="card-aurora"></div>
+    <div class="card-inner"></div>
+    <div class="card-content">
       <div>
         <div class="brand">hydrate solutions</div>
         <div class="brand-email">myhydratestation@gmail.com</div>
@@ -144,89 +279,307 @@
       <div style="position:relative;">
         <button class="book-btn" id="bookBtn">
           book appointment
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div class="book-dropdown" id="bookDropdown">
-          <a href="tel:3052835447" class="book-option">
-            <div class="book-option-dot"></div>
-            call us · 305-283-5447
-          </a>
-          <a href="mailto:info@hydratesolutions.com" class="book-option">
-            <div class="book-option-dot"></div>
-            email us
-          </a>
-          <div class="book-option">
-            <div class="book-option-dot"></div>
-            schedule online
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <section class="sazzad-card aurora-teal" style="border-radius: 24px; margin-bottom: 1.2rem;">
-    <div class="sazzad-aurora"></div>
-    <div class="sazzad-bg"></div>
-    <div class="sazzad-content" style="padding:1.8rem 2rem; font-size: 0.95rem; line-height: 1.7;">
-      Professional wellness and hydration services. Our mission is to restore your vitality and performance through science-backed protocols.
-    </div>
-  </section>
-
-  <div class="section-label">packages</div>
-
-  <div class="packages-grid">
-    <div class="package-card sazzad-card">
-      <div class="sazzad-bg"></div>
-      <div class="sazzad-content">
-        <div class="pkg-img">BASIC</div>
-        <div class="pkg-info">
-          <div class="pkg-top"><span>package 1</span><span class="pkg-price">$59</span></div>
-          <div class="pkg-desc">Essential hydration for everyday wellness.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="package-card sazzad-card">
-      <div class="sazzad-bg"></div>
-      <div class="sazzad-content">
-        <div class="pkg-img">PREMIUM</div>
-        <div class="pkg-info">
-          <div class="pkg-top"><span>package 2</span><span class="pkg-price">$79</span></div>
-          <div class="pkg-desc">Enhanced recovery for athletes and performance.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="package-card sazzad-card">
-      <div class="sazzad-bg"></div>
-      <div class="sazzad-content">
-        <div class="pkg-img">COMPLETE</div>
-        <div class="pkg-info">
-          <div class="pkg-top"><span>package 3</span><span class="pkg-price">$129</span></div>
-          <div class="pkg-desc">The ultimate wellness program for total body restoration.</div>
+          <a href="tel:3052835447" class="book-option"><div class="book-option-dot"></div>call us · 305-283-5447</a>
+          <a href="mailto:myhydratestation@gmail.com" class="book-option"><div class="book-option-dot"></div>email us</a>
+          <div class="book-option"><div class="book-option-dot"></div>schedule online</div>
         </div>
       </div>
     </div>
   </div>
 
-  <footer class="footer">hydrate solutions · 305-283-5447</footer>
+  <!-- bio -->
+  <div class="card bio aurora-teal">
+    <div class="card-aurora"></div>
+    <div class="card-inner"></div>
+    <div class="card-content">
+      Professional wellness and hydration services. Our mission is to restore your vitality and performance through science-backed protocols.
+    </div>
+  </div>
+
+  <!-- contact card -->
+  <div class="card contact-card aurora-mint">
+    <div class="card-aurora"></div>
+    <div class="card-inner"></div>
+    <div class="card-content">
+      <div>
+        <div class="contact-title">have questions? reach out</div>
+        <div class="contact-sub">305-283-5447 · myhydratestation@gmail.com</div>
+      </div>
+      <div class="contact-btns">
+        <a href="tel:3052835447" class="contact-btn call">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.4 2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          call now
+        </a>
+        <a href="mailto:myhydratestation@gmail.com" class="contact-btn email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          email us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- general packages -->
+  <div class="card aurora-blue" id="sec-general">
+    <div class="card-aurora"></div>
+    <div class="card-inner"></div>
+    <div class="card-content">
+      <div class="section-header" onclick="toggleSection('sec-general')">
+        <div><div class="section-title">general packages</div><div class="section-count">5 packages</div></div>
+        <div class="section-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+      <div class="section-body">
+        <div class="section-divider"></div>
+        <div class="pkg-grid">
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(100,180,255,0.3),rgba(150,210,255,0.12))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><circle cx="22" cy="22" r="16" fill="none" stroke="#1a2a3a" stroke-width="2.5"/></svg>
+              <div class="pkg-img-label">starter</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">package 1</span><span class="pkg-price">$59.99</span></div>
+              <div class="pkg-desc">essential hydration for everyday wellness.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('pg1','pga1')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="pg1"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>initial consultation and assessment</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>personalized hydration plan</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>30-day follow-up support</div></div></div>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(80,160,240,0.3),rgba(120,200,255,0.12))">
+              <svg width="40" height="44" viewBox="0 0 40 44" opacity="0.3"><polygon points="20,3 37,41 3,41" fill="none" stroke="#1a2a3a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+              <div class="pkg-img-label">standard</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">package 2</span><span class="pkg-price">$79.99</span></div>
+              <div class="pkg-desc">advanced care with ongoing monitoring.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('pg2','pga2')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="pg2"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in package 1</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>weekly check-ins for 60 days</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>supplement recommendations</div></div></div>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(60,140,220,0.3),rgba(100,180,255,0.12))">
+              <svg width="48" height="38" viewBox="0 0 48 38" opacity="0.3"><rect x="5" y="5" width="38" height="28" rx="4" fill="none" stroke="#1a2a3a" stroke-width="2.5"/></svg>
+              <div class="pkg-img-label">premium</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">package 3</span><span class="pkg-price">$99.99</span></div>
+              <div class="pkg-desc">full 90-day hydration and wellness program.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('pg3','pga3')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="pg3"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in package 2</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>bi-weekly sessions for 90 days</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>dedicated specialist assigned</div></div></div>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(40,120,200,0.3),rgba(80,160,240,0.12))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><path d="M22 3l5 12h13l-10 7 4 12-12-8-12 8 4-12-10-7h13z" fill="none" stroke="#1a2a3a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+              <div class="pkg-img-label">elite</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">package 4</span><span class="pkg-price">$119.99</span></div>
+              <div class="pkg-desc">elite care for peak performance.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('pg4','pga4')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="pg4"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>full performance assessment</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>custom electrolyte protocol</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>monthly lab review</div></div></div>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(20,100,180,0.3),rgba(60,140,220,0.12))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><circle cx="22" cy="22" r="16" fill="none" stroke="#1a2a3a" stroke-width="2.5"/><line x1="22" y1="10" x2="22" y2="34" stroke="#1a2a3a" stroke-width="2.5"/><line x1="10" y1="22" x2="34" y2="22" stroke="#1a2a3a" stroke-width="2.5"/></svg>
+              <div class="pkg-img-label">ultimate</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">package 5</span><span class="pkg-price">$129.99</span></div>
+              <div class="pkg-desc">all-inclusive full-body restoration.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('pg5','pga5')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="pg5"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>all packages combined</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>unlimited specialist access</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>full nutrition and hydration report</div></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- peptides -->
+  <div class="card aurora-indigo" id="sec-peptides">
+    <div class="card-aurora"></div>
+    <div class="card-inner"></div>
+    <div class="card-content">
+      <div class="section-header" onclick="toggleSection('sec-peptides')">
+        <div><div class="section-title">peptides</div><div class="section-count">50 peptides available</div></div>
+        <div class="section-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+      <div class="section-body">
+        <div class="section-divider"></div>
+        <div class="peptide-grid" id="peptideGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- weight loss -->
+  <div class="card aurora-rose" id="sec-weightloss">
+    <div class="card-aurora"></div>
+    <div class="card-inner"></div>
+    <div class="card-content">
+      <div class="section-header" onclick="toggleSection('sec-weightloss')">
+        <div><div class="section-title">weight loss</div><div class="section-count">4 packages</div></div>
+        <div class="section-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+      <div class="section-body">
+        <div class="section-divider"></div>
+        <div class="pkg-grid">
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,160,180,0.28),rgba(255,200,215,0.12))">
+              <svg width="40" height="44" viewBox="0 0 40 44" opacity="0.3"><polygon points="20,3 37,41 3,41" fill="none" stroke="#3a1a2a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+              <div class="pkg-img-label">starter</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">wl package 1</span><span class="pkg-price">$69.99</span></div>
+              <div class="pkg-desc">kickstart your weight loss journey safely.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('wl1','wla1')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="wl1"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>metabolic assessment</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>personalized caloric plan</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>30-day coaching</div></div></div>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,140,165,0.28),rgba(255,185,205,0.12))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><circle cx="22" cy="22" r="16" fill="none" stroke="#3a1a2a" stroke-width="2.5"/></svg>
+              <div class="pkg-img-label">accelerate</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">wl package 2</span><span class="pkg-price">$89.99</span></div>
+              <div class="pkg-desc">accelerated fat loss with guided protocols.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('wl2','wla2')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="wl2"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in wl package 1</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>weekly weigh-in tracking</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>appetite suppression support</div></div></div>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,120,150,0.28),rgba(255,170,190,0.12))">
+              <svg width="48" height="38" viewBox="0 0 48 38" opacity="0.3"><rect x="5" y="5" width="38" height="28" rx="4" fill="none" stroke="#3a1a2a" stroke-width="2.5"/></svg>
+              <div class="pkg-img-label">transform</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">wl package 3</span><span class="pkg-price">$109.99</span></div>
+              <div class="pkg-desc">full body transformation over 60 days.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('wl3','wla3')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="wl3"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in wl package 2</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>body composition analysis</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>meal planning assistance</div></div></div>
+            </div>
+          </div>
+
+          <div class="pkg-card">
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,100,135,0.28),rgba(255,155,175,0.12))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><path d="M22 3l5 12h13l-10 7 4 12-12-8-12 8 4-12-10-7h13z" fill="none" stroke="#3a1a2a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+              <div class="pkg-img-label">complete</div>
+            </div>
+            <div class="pkg-info">
+              <div class="pkg-top"><span class="pkg-name">wl package 4</span><span class="pkg-price">$139.99</span></div>
+              <div class="pkg-desc">complete weight loss and lifestyle overhaul.</div>
+              <div class="pkg-detail-row" onclick="togglePkg('wl4','wla4')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="pkg-detail-body" id="wl4"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>all wl packages combined</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>90-day dedicated specialist</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>ongoing lifestyle coaching</div></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">hydrate solutions · 305-283-5447 · myhydratestation@gmail.com</div>
+
 </div>
 
 <script>
-  const btn = document.getElementById('bookBtn');
-  const menu = document.getElementById('bookDropdown');
-
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    btn.classList.toggle('open');
-    menu.classList.toggle('open');
-  });
-
+  // book dropdown
+  const bookBtn = document.getElementById('bookBtn')
+  const bookDropdown = document.getElementById('bookDropdown')
+  bookBtn.addEventListener('click', e => {
+    e.stopPropagation()
+    bookBtn.classList.toggle('open')
+    bookDropdown.classList.toggle('open')
+  })
   document.addEventListener('click', () => {
-    btn.classList.remove('open');
-    menu.classList.remove('open');
-  });
-</script>
+    bookBtn.classList.remove('open')
+    bookDropdown.classList.remove('open')
+  })
 
+  // section toggles
+  function toggleSection(id) {
+    document.getElementById(id).classList.toggle('section-open')
+  }
+
+  // package detail toggles
+  function togglePkg(bodyId, arrowId) {
+    document.getElementById(bodyId).classList.toggle('open')
+    document.getElementById(arrowId).classList.toggle('open')
+  }
+
+  // generate 50 peptides
+  const peptides = [
+    { name: 'BPC-157', use: 'gut healing, injury repair', price: '$45' },
+    { name: 'TB-500', use: 'tissue regeneration', price: '$55' },
+    { name: 'CJC-1295', use: 'growth hormone release', price: '$60' },
+    { name: 'Ipamorelin', use: 'anti-aging, fat loss', price: '$50' },
+    { name: 'AOD-9604', use: 'fat metabolism', price: '$48' },
+    { name: 'Semax', use: 'cognitive enhancement', price: '$52' },
+    { name: 'Selank', use: 'anxiety, focus', price: '$49' },
+    { name: 'PT-141', use: 'libido support', price: '$65' },
+    { name: 'DSIP', use: 'sleep improvement', price: '$44' },
+    { name: 'Epithalon', use: 'longevity, telomere support', price: '$58' },
+    { name: 'SS-31', use: 'mitochondrial health', price: '$70' },
+    { name: 'GHK-Cu', use: 'skin repair, anti-aging', price: '$46' },
+    { name: 'KPV', use: 'anti-inflammatory', price: '$42' },
+    { name: 'LL-37', use: 'immune defense', price: '$53' },
+    { name: 'MOTS-C', use: 'metabolic function', price: '$68' },
+    { name: 'Humanin', use: 'neuroprotection', price: '$64' },
+    { name: 'Sermorelin', use: 'GH secretagogue', price: '$57' },
+    { name: 'Hexarelin', use: 'muscle growth', price: '$61' },
+    { name: 'GHRP-2', use: 'growth hormone peptide', price: '$47' },
+    { name: 'GHRP-6', use: 'appetite, GH stimulation', price: '$47' },
+    { name: 'IGF-1 LR3', use: 'muscle building', price: '$75' },
+    { name: 'PEG-MGF', use: 'muscle repair', price: '$72' },
+    { name: 'Follistatin 344', use: 'muscle growth', price: '$80' },
+    { name: 'Thymosin Alpha-1', use: 'immune modulation', price: '$66' },
+    { name: 'Thymosin Beta-4', use: 'tissue healing', price: '$63' },
+    { name: 'VIP', use: 'inflammation, gut health', price: '$59' },
+    { name: 'Oxytocin', use: 'social bonding, recovery', price: '$54' },
+    { name: 'NAD+', use: 'cellular energy', price: '$85' },
+    { name: 'NMN', use: 'anti-aging', price: '$78' },
+    { name: 'Cerebrolysin', use: 'brain health', price: '$90' },
+    { name: 'Dihexa', use: 'cognitive performance', price: '$88' },
+    { name: 'NSI-189', use: 'neurogenesis', price: '$82' },
+    { name: 'PE-22-28', use: 'antidepressant effects', price: '$76' },
+    { name: 'P21', use: 'BDNF increase', price: '$74' },
+    { name: 'FGL', use: 'memory and learning', price: '$71' },
+    { name: 'Snap-8', use: 'wrinkle reduction', price: '$43' },
+    { name: 'Argireline', use: 'topical anti-aging', price: '$40' },
+    { name: 'Palmitoyl', use: 'skin collagen', price: '$41' },
+    { name: 'SHU-9119', use: 'appetite suppression', price: '$56' },
+    { name: 'Melanotan II', use: 'tanning, libido', price: '$62' },
+    { name: 'FOXO4-DRI', use: 'senolytic, longevity', price: '$95' },
+    { name: 'Carnosine', use: 'anti-glycation', price: '$38' },
+    { name: 'TA-65', use: 'telomere activation', price: '$92' },
+    { name: 'ARA-290', use: 'nerve repair', price: '$67' },
+    { name: 'Kisspeptin', use: 'hormonal balance', price: '$69' },
+    { name: 'Gonadorelin', use: 'testosterone support', price: '$73' },
+    { name: 'LGD-4', use: 'lean muscle', price: '$77' },
+    { name: 'Semaglutide', use: 'weight management, GLP-1', price: '$99' },
+    { name: 'Tirzepatide', use: 'dual GIP/GLP-1 agonist', price: '$105' },
+    { name: 'Retatrutide', use: 'triple agonist, fat loss', price: '$110' },
+  ]
+
+  const grid = document.getElementById('peptideGrid')
+  peptides.forEach(p => {
+    const c = document.createElement('div')
+    c.className = 'peptide-card'
+    c.innerHTML = `<div class="peptide-name">${p.name}</div><div class="peptide-use">${p.use}</div><div class="peptide-price">${p.price}</div>`
+    grid.appendChild(c)
+  })
+</script>
 </body>
 </html>
