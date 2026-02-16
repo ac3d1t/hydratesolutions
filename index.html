@@ -14,6 +14,8 @@
       --accent: #2196f3;
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
@@ -27,12 +29,17 @@
       overflow-x: hidden;
     }
 
-    .blob { position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.4; pointer-events: none; z-index: 0; animation: blobFloat 10s ease-in-out infinite; }
-    .blob1 { width: 500px; height: 500px; background: rgba(100,180,255,0.35); top: -150px; left: -150px; }
-    .blob2 { width: 350px; height: 350px; background: rgba(150,220,255,0.3); top: 40%; right: -100px; animation-delay: 3s; }
-    .blob3 { width: 400px; height: 400px; background: rgba(180,235,255,0.25); bottom: -100px; left: 20%; animation-delay: 6s; }
-    @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(20px,-25px) scale(1.04)} 66%{transform:translate(-12px,12px) scale(0.97)} }
+    /* ── blobs ── */
+    .blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.38; pointer-events: none; z-index: 0; }
+    .blob1 { width: 520px; height: 520px; background: rgba(100,180,255,0.4); top: -160px; left: -160px; animation: b1 14s ease-in-out infinite; }
+    .blob2 { width: 360px; height: 360px; background: rgba(150,220,255,0.3); top: 38%; right: -100px; animation: b2 11s ease-in-out infinite; }
+    .blob3 { width: 420px; height: 420px; background: rgba(180,235,255,0.28); bottom: -110px; left: 18%; animation: b3 16s ease-in-out infinite; }
 
+    @keyframes b1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(24px,-28px) scale(1.05)} 66%{transform:translate(-14px,16px) scale(0.96)} }
+    @keyframes b2 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(-18px,22px) scale(1.07)} 75%{transform:translate(12px,-12px) scale(0.95)} }
+    @keyframes b3 { 0%,100%{transform:translate(0,0) scale(1)} 30%{transform:translate(16px,-20px) scale(1.04)} 70%{transform:translate(-20px,10px) scale(0.98)} }
+
+    /* ── layout ── */
     .container {
       max-width: 720px;
       margin: 0 auto;
@@ -44,51 +51,62 @@
       gap: 1rem;
     }
 
-    /* ── card base ── */
+    /* ── card ── */
     .card {
       position: relative;
       border-radius: 26px;
       overflow: visible;
-      background: rgba(255,255,255,0.25);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
       border: 1px solid rgba(255,255,255,0.45);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.6);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.65);
+
+      /* entrance animation */
+      opacity: 0;
+      transform: translateY(22px);
+      animation: cardIn 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
     }
 
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* stagger each card */
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.13s; }
+    .card:nth-child(3) { animation-delay: 0.21s; }
+    .card:nth-child(4) { animation-delay: 0.29s; }
+    .card:nth-child(5) { animation-delay: 0.37s; }
+    .card:nth-child(6) { animation-delay: 0.45s; }
+
     .card-inner {
-      position: absolute;
-      inset: 5px;
-      border-radius: 21px;
-      background: linear-gradient(145deg, rgba(255,255,255,0.82), rgba(245,248,255,0.55));
+      position: absolute; inset: 5px; border-radius: 21px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.8), rgba(245,248,255,0.5));
       border: 1px solid rgba(255,255,255,0.7);
-      z-index: 1;
-      pointer-events: none;
+      z-index: 1; pointer-events: none;
     }
 
     .card-aurora {
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 220px; height: 220px;
-      border-radius: 50%;
-      filter: blur(45px);
-      z-index: 0;
-      opacity: 0.45;
+      position: absolute; top: 50%; left: 50%;
+      width: 240px; height: 240px; border-radius: 50%;
+      filter: blur(50px); z-index: 0; opacity: 0.4;
       pointer-events: none;
-      animation: auroraMove 9s infinite ease-in-out;
+      animation: auroraMove 11s infinite ease-in-out;
     }
 
     .aurora-sky .card-aurora    { background: radial-gradient(circle, #90d4ff, #c8ecff, transparent); }
-    .aurora-teal .card-aurora   { background: radial-gradient(circle, #80f0e0, #c0fff8, transparent); }
-    .aurora-blue .card-aurora   { background: radial-gradient(circle, #80b4ff, #c0d8ff, transparent); }
-    .aurora-indigo .card-aurora { background: radial-gradient(circle, #a0a8ff, #d0d4ff, transparent); }
-    .aurora-mint .card-aurora   { background: radial-gradient(circle, #80e8c0, #c0f8e8, transparent); }
-    .aurora-rose .card-aurora   { background: radial-gradient(circle, #ffb0c8, #ffd8e8, transparent); }
+    .aurora-teal .card-aurora   { background: radial-gradient(circle, #70f0e0, #b8fff8, transparent); }
+    .aurora-blue .card-aurora   { background: radial-gradient(circle, #78b0ff, #bcd4ff, transparent); }
+    .aurora-indigo .card-aurora { background: radial-gradient(circle, #9ca4ff, #ccd0ff, transparent); }
+    .aurora-mint .card-aurora   { background: radial-gradient(circle, #78e8b8, #b8f8e0, transparent); }
+    .aurora-rose .card-aurora   { background: radial-gradient(circle, #ffaac4, #ffd4e4, transparent); }
 
     @keyframes auroraMove {
       0%,100% { transform: translate(-55%,-55%) scale(1); }
-      35% { transform: translate(-30%,-40%) scale(1.18); }
-      70% { transform: translate(-65%,-35%) scale(1.05); }
+      28%  { transform: translate(-28%,-38%) scale(1.2); }
+      55%  { transform: translate(-68%,-32%) scale(1.06); }
+      80%  { transform: translate(-40%,-60%) scale(0.92); }
     }
 
     .card-content { position: relative; z-index: 2; width: 100%; }
@@ -103,147 +121,264 @@
     .brand { font-family: 'Playfair Display', serif; font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
     .brand-email { font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem; }
 
-    .book-btn {
-      background: rgba(33,150,243,0.15);
-      border: 1px solid rgba(33,150,243,0.35);
-      backdrop-filter: blur(12px);
-      color: #1565c0;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.76rem; font-weight: 500;
-      padding: 0.55rem 1.1rem; border-radius: 50px; cursor: pointer;
-      white-space: nowrap; transition: all 0.2s ease;
-      display: flex; align-items: center; gap: 0.35rem;
-      position: relative;
+    /* ── shokat button (uiverse.io by shokat_2650) ── */
+    @property --angle-1 { syntax: "<angle>"; inherits: false; initial-value: -75deg; }
+    @property --angle-2 { syntax: "<angle>"; inherits: false; initial-value: -45deg; }
+
+    .button-wrap {
+      position: relative; z-index: 2; border-radius: 999vw;
+      background: transparent; pointer-events: none;
+      transition: all 400ms cubic-bezier(0.25,1,0.5,1);
+      font-size: 0.8rem;
     }
-    .book-btn:hover { background: rgba(33,150,243,0.22); transform: translateY(-1px); }
-    .book-btn svg { width: 11px; height: 11px; transition: transform 0.2s ease; flex-shrink: 0; }
-    .book-btn.open svg { transform: rotate(180deg); }
+    .button-wrap:has(button:active) { transform: rotate3d(1,0,0,25deg); }
+
+    .button-shadow {
+      --shadow-cuttoff-fix: 2em;
+      position: absolute;
+      width: calc(100% + var(--shadow-cuttoff-fix));
+      height: calc(100% + var(--shadow-cuttoff-fix));
+      top: calc(0% - var(--shadow-cuttoff-fix)/2);
+      left: calc(0% - var(--shadow-cuttoff-fix)/2);
+      filter: blur(clamp(2px,0.125em,12px));
+      overflow: visible; pointer-events: none;
+    }
+    .button-shadow::after {
+      content: ""; position: absolute; z-index: 0; inset: 0; border-radius: 999vw;
+      background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.08));
+      width: calc(100% - var(--shadow-cuttoff-fix) - 0.25em);
+      height: calc(100% - var(--shadow-cuttoff-fix) - 0.25em);
+      top: calc(var(--shadow-cuttoff-fix) - 0.5em);
+      left: calc(var(--shadow-cuttoff-fix) - 0.875em);
+      padding: 0.125em; box-sizing: border-box;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      transition: all 400ms cubic-bezier(0.25,1,0.5,1); opacity: 1;
+    }
+    .button-wrap:has(button:hover) .button-shadow { filter: blur(clamp(2px,0.0625em,6px)); }
+    .button-wrap:has(button:hover) .button-shadow::after { top: calc(var(--shadow-cuttoff-fix) - 0.875em); }
+    .button-wrap:has(button:active) .button-shadow::after { top: calc(var(--shadow-cuttoff-fix) - 0.5em); opacity: 0.75; }
+
+    .button-wrap button {
+      --border-width: clamp(1px,0.0625em,4px);
+      all: unset; cursor: pointer; position: relative; pointer-events: auto; z-index: 3;
+      background: linear-gradient(-75deg, rgba(255,255,255,0.05), rgba(255,255,255,0.22), rgba(255,255,255,0.05));
+      border-radius: 999vw;
+      box-shadow:
+        inset 0 0.125em 0.125em rgba(0,0,0,0.05),
+        inset 0 -0.125em 0.125em rgba(255,255,255,0.5),
+        0 0.25em 0.125em -0.125em rgba(0,0,0,0.18),
+        0 0 0.1em 0.25em inset rgba(255,255,255,0.2);
+      backdrop-filter: blur(clamp(1px,0.125em,4px));
+      -webkit-backdrop-filter: blur(clamp(1px,0.125em,4px));
+      transition: all 400ms cubic-bezier(0.25,1,0.5,1);
+    }
+    .button-wrap button:hover { transform: scale(0.975); }
+    .button-wrap button::after {
+      content: ""; position: absolute; z-index: 1; inset: 0; border-radius: 999vw;
+      width: calc(100% + var(--border-width)); height: calc(100% + var(--border-width));
+      top: calc(0% - var(--border-width)/2); left: calc(0% - var(--border-width)/2);
+      padding: var(--border-width); box-sizing: border-box;
+      background: conic-gradient(
+        from var(--angle-1) at 50% 50%,
+        rgba(0,0,0,0.45), rgba(0,0,0,0) 5% 40%,
+        rgba(0,0,0,0.45) 50%, rgba(0,0,0,0) 60% 95%, rgba(0,0,0,0.45)
+      ), linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.5));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      transition: all 400ms cubic-bezier(0.25,1,0.5,1), --angle-1 500ms ease;
+    }
+    .button-wrap button:hover::after { --angle-1: -125deg; }
+    .button-wrap button:active::after { --angle-1: -75deg; }
+
+    .button-wrap button span {
+      position: relative; display: flex; align-items: center; gap: 0.35em;
+      user-select: none; font-family: 'DM Sans', sans-serif;
+      letter-spacing: -0.02em; font-weight: 500; font-size: 1em;
+      color: rgba(35,35,35,1); -webkit-font-smoothing: antialiased;
+      text-shadow: 0em 0.2em 0.05em rgba(0,0,0,0.08);
+      transition: all 400ms cubic-bezier(0.25,1,0.5,1);
+      padding-inline: 1.3em; padding-block: 0.72em;
+    }
+    .button-wrap button span::after {
+      content: ""; display: block; position: absolute; z-index: 3;
+      width: calc(100% - var(--border-width)); height: calc(100% - var(--border-width));
+      top: calc(0% + var(--border-width)/2); left: calc(0% + var(--border-width)/2);
+      box-sizing: border-box; border-radius: 999vw; overflow: clip;
+      background: linear-gradient(var(--angle-2), rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 40% 50%, rgba(255,255,255,0) 55%);
+      mix-blend-mode: screen; pointer-events: none;
+      background-size: 200% 200%; background-position: 0% 50%; background-repeat: no-repeat;
+      transition: background-position 500ms cubic-bezier(0.25,1,0.5,1), --angle-2 500ms cubic-bezier(0.25,1,0.5,1);
+    }
+    .button-wrap button:hover span::after { background-position: 25% 50%; }
+    .button-wrap button:active span::after { background-position: 50% 15%; --angle-2: -15deg; }
+
+    .book-btn-chevron { width: 11px; height: 11px; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+    .book-btn-chevron.open { transform: rotate(180deg); }
 
     .book-dropdown {
       position: absolute; top: calc(100% + 10px); right: 0;
       min-width: 240px; border-radius: 22px; padding: 0.6rem; z-index: 9999;
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.94);
       backdrop-filter: blur(40px) saturate(200%);
       -webkit-backdrop-filter: blur(40px) saturate(200%);
       border: 1px solid rgba(255,255,255,0.7);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.14);
-      opacity: 0; transform: translateY(-8px) scale(0.96);
-      pointer-events: none; transition: all 0.28s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.13);
+      opacity: 0; transform: translateY(-10px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.16,1,0.3,1), transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
     .book-dropdown.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
 
     .book-option {
       padding: 0.75rem 1rem; border-radius: 14px; font-size: 0.78rem; color: var(--text);
       cursor: pointer; display: flex; align-items: center; gap: 0.6rem;
-      text-decoration: none; transition: background 0.15s ease;
+      text-decoration: none;
+      transition: background 0.18s ease, transform 0.18s cubic-bezier(0.16,1,0.3,1);
     }
-    .book-option:hover { background: rgba(33,150,243,0.08); }
+    .book-option:hover { background: rgba(33,150,243,0.08); transform: translateX(3px); }
     .book-option-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
     /* ── bio ── */
-    .bio .card-content { padding: 1.6rem 2rem; font-size: 0.9rem; line-height: 1.75; color: rgba(26,42,58,0.72); }
+    .bio .card-content { padding: 1.6rem 2rem; font-size: 0.9rem; line-height: 1.8; color: rgba(26,42,58,0.7); }
 
     /* ── contact card ── */
     .contact-card .card-content {
-      padding: 1.4rem 2rem;
+      padding: 1.5rem 2rem;
       display: flex; align-items: center; justify-content: space-between;
       flex-wrap: wrap; gap: 1rem;
     }
-    .contact-title { font-size: 0.88rem; font-weight: 600; }
-    .contact-sub { font-size: 0.66rem; color: var(--muted); margin-top: 0.15rem; }
+    .contact-eyebrow { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+    .contact-title { font-size: 0.95rem; font-weight: 600; line-height: 1.3; }
+    .contact-sub { font-size: 0.66rem; color: var(--muted); margin-top: 0.2rem; }
     .contact-btns { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 
     .contact-btn {
-      padding: 0.5rem 1rem; border-radius: 50px; font-family: 'DM Sans', sans-serif;
-      font-size: 0.72rem; font-weight: 500; cursor: pointer; text-decoration: none;
-      display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s ease; border: none;
+      padding: 0.55rem 1.1rem; border-radius: 50px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      display: flex; align-items: center; gap: 0.4rem; border: none;
+      transition: background 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease;
     }
-    .contact-btn.call { background: rgba(33,150,243,0.15); border: 1px solid rgba(33,150,243,0.35); color: #1565c0; }
-    .contact-btn.call:hover { background: rgba(33,150,243,0.25); transform: translateY(-1px); }
-    .contact-btn.email { background: rgba(80,200,160,0.15); border: 1px solid rgba(80,200,160,0.35); color: #1a6c50; }
-    .contact-btn.email:hover { background: rgba(80,200,160,0.25); transform: translateY(-1px); }
+    .contact-btn:active { transform: scale(0.97); }
+    .contact-btn.call { background: rgba(33,150,243,0.14); border: 1px solid rgba(33,150,243,0.32); color: #1565c0; }
+    .contact-btn.call:hover { background: rgba(33,150,243,0.24); transform: translateY(-2px); box-shadow: 0 5px 14px rgba(33,150,243,0.16); }
+    .contact-btn.email { background: rgba(80,200,160,0.14); border: 1px solid rgba(80,200,160,0.32); color: #1a6c50; }
+    .contact-btn.email:hover { background: rgba(80,200,160,0.24); transform: translateY(-2px); box-shadow: 0 5px 14px rgba(80,200,160,0.16); }
     .contact-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-    /* ── collapsible sections ── */
+    /* ── section headers ── */
     .section-header {
       display: flex; align-items: center; justify-content: space-between;
       cursor: pointer; padding: 1.3rem 1.8rem; user-select: none;
+      transition: opacity 0.2s ease;
     }
+    .section-header:hover { opacity: 0.85; }
     .section-title { font-size: 1rem; font-weight: 600; }
     .section-count { font-size: 0.62rem; color: var(--muted); margin-top: 0.1rem; }
 
     .section-chevron {
-      width: 22px; height: 22px;
-      background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.6);
+      width: 24px; height: 24px;
+      background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.65);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), background 0.2s;
+      flex-shrink: 0;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.25s ease;
     }
     .section-chevron svg { width: 10px; height: 10px; color: var(--muted); }
-    .section-open .section-chevron { transform: rotate(180deg); background: rgba(33,150,243,0.12); }
+    .section-open .section-chevron { transform: rotate(180deg); background: rgba(33,150,243,0.14); }
 
-    .section-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1); }
-    .section-open .section-body { max-height: 4000px; }
+    .section-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .section-open .section-body { max-height: 5000px; }
 
-    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); margin: 0 1.5rem; }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent); margin: 0 1.5rem; }
 
-    /* ── packages grid ── */
+    /* ── pkg grid ── */
     .pkg-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-      gap: 0.8rem;
-      padding: 1rem 1.2rem 1.4rem;
+      gap: 0.8rem; padding: 1rem 1.2rem 1.4rem;
     }
 
     .pkg-card {
       border-radius: 20px; overflow: hidden;
-      background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.28); border: 1px solid rgba(255,255,255,0.5);
       box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease;
-      cursor: default;
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease;
+
+      /* staggered entrance when section opens */
+      opacity: 0; transform: translateY(14px) scale(0.97);
+      animation: none;
     }
-    .pkg-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.1); }
+    .pkg-card.visible {
+      animation: pkgIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes pkgIn {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .pkg-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+    .pkg-card:active { transform: translateY(-1px) scale(1.005); }
 
     .pkg-img {
       aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
       flex-direction: column; gap: 0.35rem;
     }
-    .pkg-img-label { font-size: 0.52rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(26,42,58,0.35); }
+    .pkg-img-label { font-size: 0.52rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(26,42,58,0.32); }
 
     .pkg-info { padding: 0.8rem 0.9rem; border-top: 1px solid rgba(255,255,255,0.35); }
     .pkg-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; }
     .pkg-name { font-size: 0.76rem; font-weight: 600; }
-    .pkg-price { font-size: 0.76rem; font-weight: 600; color: #1565c0; }
+    .pkg-price-tag {
+      font-size: 0.62rem; font-weight: 500; color: #1565c0;
+      background: rgba(33,150,243,0.1); border: 1px solid rgba(33,150,243,0.2);
+      padding: 0.15rem 0.5rem; border-radius: 50px;
+      white-space: nowrap;
+    }
     .pkg-desc { font-size: 0.62rem; color: var(--muted); line-height: 1.4; }
 
-    .pkg-detail-row { display: flex; align-items: center; gap: 0.25rem; margin-top: 0.45rem; cursor: pointer; }
+    .pkg-detail-row {
+      display: flex; align-items: center; gap: 0.25rem;
+      margin-top: 0.45rem; cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    .pkg-detail-row:hover { opacity: 0.7; }
     .pkg-detail-label { font-size: 0.58rem; color: rgba(33,150,243,0.8); font-weight: 500; }
-    .pkg-detail-arrow { width: 9px; height: 9px; color: rgba(33,150,243,0.8); transition: transform 0.25s ease; }
+    .pkg-detail-arrow { width: 9px; height: 9px; color: rgba(33,150,243,0.8); transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); }
     .pkg-detail-arrow.open { transform: rotate(180deg); }
 
-    .pkg-detail-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease; opacity: 0; }
+    .pkg-detail-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease; opacity: 0; }
     .pkg-detail-body.open { max-height: 200px; opacity: 1; }
-
     .pkg-detail-inner { padding-top: 0.55rem; border-top: 1px solid rgba(255,255,255,0.35); margin-top: 0.45rem; display: flex; flex-direction: column; gap: 0.3rem; }
     .pkg-detail-item { display: flex; gap: 0.4rem; align-items: flex-start; font-size: 0.59rem; color: var(--muted); line-height: 1.35; }
     .pkg-bullet { width: 3px; height: 3px; border-radius: 50%; background: var(--accent); margin-top: 0.42em; flex-shrink: 0; }
 
-    /* ── peptides grid ── */
+    /* ── peptide grid ── */
     .peptide-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 0.6rem;
-      padding: 1rem 1.2rem 1.4rem;
+      gap: 0.6rem; padding: 1rem 1.2rem 1.4rem;
     }
     .peptide-card {
-      border-radius: 16px; background: rgba(255,255,255,0.28);
+      border-radius: 16px; background: rgba(255,255,255,0.26);
       border: 1px solid rgba(255,255,255,0.5); padding: 0.85rem 0.8rem;
       box-shadow: 0 3px 12px rgba(0,0,0,0.05);
-      transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease;
+      opacity: 0; transform: translateY(10px);
+      animation: none;
     }
-    .peptide-card:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(0,0,0,0.09); }
+    .peptide-card.visible {
+      animation: pkgIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .peptide-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,0.09); }
     .peptide-name { font-size: 0.72rem; font-weight: 600; margin-bottom: 0.12rem; }
     .peptide-use { font-size: 0.58rem; color: var(--muted); line-height: 1.35; margin-bottom: 0.35rem; }
-    .peptide-price { font-size: 0.7rem; font-weight: 600; color: #1565c0; }
+    .peptide-price {
+      font-size: 0.6rem; font-weight: 500; color: #1565c0;
+      background: rgba(33,150,243,0.1); border: 1px solid rgba(33,150,243,0.2);
+      padding: 0.12rem 0.45rem; border-radius: 50px; display: inline-block;
+    }
 
     /* ── footer ── */
     .footer { text-align: center; font-size: 0.65rem; color: var(--muted); padding-top: 0.5rem; }
@@ -269,6 +404,15 @@
 
   <!-- header -->
   <div class="card header aurora-sky">
+    <!-- dotted grid background -->
+    <svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;border-radius:26px;overflow:hidden;pointer-events:none;">
+      <defs>
+        <pattern patternUnits="userSpaceOnUse" height="28" width="28" id="dottedGrid">
+          <circle fill="rgba(0,0,0,0.1)" r="1" cy="2" cx="2"></circle>
+        </pattern>
+      </defs>
+      <rect fill="url(#dottedGrid)" height="100%" width="100%"></rect>
+    </svg>
     <div class="card-aurora"></div>
     <div class="card-inner"></div>
     <div class="card-content">
@@ -277,10 +421,12 @@
         <div class="brand-email">myhydratestation@gmail.com</div>
       </div>
       <div style="position:relative;">
-        <button class="book-btn" id="bookBtn">
-          book appointment
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
+        <div class="button-wrap">
+          <button id="bookBtn">
+            <span>book appointment <svg class="book-btn-chevron" id="bookChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="button-shadow"></div>
+        </div>
         <div class="book-dropdown" id="bookDropdown">
           <a href="tel:3052835447" class="book-option"><div class="book-option-dot"></div>call us · 305-283-5447</a>
           <a href="mailto:myhydratestation@gmail.com" class="book-option"><div class="book-option-dot"></div>email us</a>
@@ -305,8 +451,9 @@
     <div class="card-inner"></div>
     <div class="card-content">
       <div>
-        <div class="contact-title">have questions? reach out</div>
-        <div class="contact-sub">305-283-5447 · myhydratestation@gmail.com</div>
+        <div class="contact-eyebrow">pricing + booking</div>
+        <div class="contact-title">want to know pricing or<br>book an appointment?</div>
+        <div class="contact-sub">call or email us and we'll get back to you right away</div>
       </div>
       <div class="contact-btns">
         <a href="tel:3052835447" class="contact-btn call">
@@ -333,72 +480,66 @@
       <div class="section-body">
         <div class="section-divider"></div>
         <div class="pkg-grid">
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(100,180,255,0.3),rgba(150,210,255,0.12))">
-              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><circle cx="22" cy="22" r="16" fill="none" stroke="#1a2a3a" stroke-width="2.5"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(100,180,255,0.28),rgba(150,210,255,0.1))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.28"><circle cx="22" cy="22" r="16" fill="none" stroke="#1a2a3a" stroke-width="2.5"/></svg>
               <div class="pkg-img-label">starter</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">package 1</span><span class="pkg-price">$59.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">package 1</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">essential hydration for everyday wellness.</div>
               <div class="pkg-detail-row" onclick="togglePkg('pg1','pga1')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="pg1"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>initial consultation and assessment</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>personalized hydration plan</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>30-day follow-up support</div></div></div>
             </div>
           </div>
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(80,160,240,0.3),rgba(120,200,255,0.12))">
-              <svg width="40" height="44" viewBox="0 0 40 44" opacity="0.3"><polygon points="20,3 37,41 3,41" fill="none" stroke="#1a2a3a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(80,160,240,0.28),rgba(120,200,255,0.1))">
+              <svg width="40" height="44" viewBox="0 0 40 44" opacity="0.28"><polygon points="20,3 37,41 3,41" fill="none" stroke="#1a2a3a" stroke-width="2.5" stroke-linejoin="round"/></svg>
               <div class="pkg-img-label">standard</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">package 2</span><span class="pkg-price">$79.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">package 2</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">advanced care with ongoing monitoring.</div>
               <div class="pkg-detail-row" onclick="togglePkg('pg2','pga2')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="pg2"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in package 1</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>weekly check-ins for 60 days</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>supplement recommendations</div></div></div>
             </div>
           </div>
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(60,140,220,0.3),rgba(100,180,255,0.12))">
-              <svg width="48" height="38" viewBox="0 0 48 38" opacity="0.3"><rect x="5" y="5" width="38" height="28" rx="4" fill="none" stroke="#1a2a3a" stroke-width="2.5"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(60,140,220,0.28),rgba(100,180,255,0.1))">
+              <svg width="48" height="38" viewBox="0 0 48 38" opacity="0.28"><rect x="5" y="5" width="38" height="28" rx="4" fill="none" stroke="#1a2a3a" stroke-width="2.5"/></svg>
               <div class="pkg-img-label">premium</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">package 3</span><span class="pkg-price">$99.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">package 3</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">full 90-day hydration and wellness program.</div>
               <div class="pkg-detail-row" onclick="togglePkg('pg3','pga3')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="pg3"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in package 2</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>bi-weekly sessions for 90 days</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>dedicated specialist assigned</div></div></div>
             </div>
           </div>
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(40,120,200,0.3),rgba(80,160,240,0.12))">
-              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><path d="M22 3l5 12h13l-10 7 4 12-12-8-12 8 4-12-10-7h13z" fill="none" stroke="#1a2a3a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(40,120,200,0.28),rgba(80,160,240,0.1))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.28"><path d="M22 3l5 12h13l-10 7 4 12-12-8-12 8 4-12-10-7h13z" fill="none" stroke="#1a2a3a" stroke-width="2.5" stroke-linejoin="round"/></svg>
               <div class="pkg-img-label">elite</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">package 4</span><span class="pkg-price">$119.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">package 4</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">elite care for peak performance.</div>
               <div class="pkg-detail-row" onclick="togglePkg('pg4','pga4')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="pg4"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>full performance assessment</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>custom electrolyte protocol</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>monthly lab review</div></div></div>
             </div>
           </div>
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(20,100,180,0.3),rgba(60,140,220,0.12))">
-              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><circle cx="22" cy="22" r="16" fill="none" stroke="#1a2a3a" stroke-width="2.5"/><line x1="22" y1="10" x2="22" y2="34" stroke="#1a2a3a" stroke-width="2.5"/><line x1="10" y1="22" x2="34" y2="22" stroke="#1a2a3a" stroke-width="2.5"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(20,100,180,0.28),rgba(60,140,220,0.1))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.28"><circle cx="22" cy="22" r="16" fill="none" stroke="#1a2a3a" stroke-width="2.5"/><line x1="22" y1="10" x2="22" y2="34" stroke="#1a2a3a" stroke-width="2.5"/><line x1="10" y1="22" x2="34" y2="22" stroke="#1a2a3a" stroke-width="2.5"/></svg>
               <div class="pkg-img-label">ultimate</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">package 5</span><span class="pkg-price">$129.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">package 5</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">all-inclusive full-body restoration.</div>
               <div class="pkg-detail-row" onclick="togglePkg('pg5','pga5')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="pga5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="pg5"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>all packages combined</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>unlimited specialist access</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>full nutrition and hydration report</div></div></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -432,88 +573,98 @@
       <div class="section-body">
         <div class="section-divider"></div>
         <div class="pkg-grid">
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,160,180,0.28),rgba(255,200,215,0.12))">
-              <svg width="40" height="44" viewBox="0 0 40 44" opacity="0.3"><polygon points="20,3 37,41 3,41" fill="none" stroke="#3a1a2a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,160,180,0.26),rgba(255,200,215,0.1))">
+              <svg width="40" height="44" viewBox="0 0 40 44" opacity="0.28"><polygon points="20,3 37,41 3,41" fill="none" stroke="#3a1a2a" stroke-width="2.5" stroke-linejoin="round"/></svg>
               <div class="pkg-img-label">starter</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">wl package 1</span><span class="pkg-price">$69.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">wl package 1</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">kickstart your weight loss journey safely.</div>
               <div class="pkg-detail-row" onclick="togglePkg('wl1','wla1')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="wl1"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>metabolic assessment</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>personalized caloric plan</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>30-day coaching</div></div></div>
             </div>
           </div>
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,140,165,0.28),rgba(255,185,205,0.12))">
-              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><circle cx="22" cy="22" r="16" fill="none" stroke="#3a1a2a" stroke-width="2.5"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,140,165,0.26),rgba(255,185,205,0.1))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.28"><circle cx="22" cy="22" r="16" fill="none" stroke="#3a1a2a" stroke-width="2.5"/></svg>
               <div class="pkg-img-label">accelerate</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">wl package 2</span><span class="pkg-price">$89.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">wl package 2</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">accelerated fat loss with guided protocols.</div>
               <div class="pkg-detail-row" onclick="togglePkg('wl2','wla2')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="wl2"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in wl package 1</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>weekly weigh-in tracking</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>appetite suppression support</div></div></div>
             </div>
           </div>
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,120,150,0.28),rgba(255,170,190,0.12))">
-              <svg width="48" height="38" viewBox="0 0 48 38" opacity="0.3"><rect x="5" y="5" width="38" height="28" rx="4" fill="none" stroke="#3a1a2a" stroke-width="2.5"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,120,150,0.26),rgba(255,170,190,0.1))">
+              <svg width="48" height="38" viewBox="0 0 48 38" opacity="0.28"><rect x="5" y="5" width="38" height="28" rx="4" fill="none" stroke="#3a1a2a" stroke-width="2.5"/></svg>
               <div class="pkg-img-label">transform</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">wl package 3</span><span class="pkg-price">$109.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">wl package 3</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">full body transformation over 60 days.</div>
               <div class="pkg-detail-row" onclick="togglePkg('wl3','wla3')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="wl3"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>everything in wl package 2</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>body composition analysis</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>meal planning assistance</div></div></div>
             </div>
           </div>
-
           <div class="pkg-card">
-            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,100,135,0.28),rgba(255,155,175,0.12))">
-              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.3"><path d="M22 3l5 12h13l-10 7 4 12-12-8-12 8 4-12-10-7h13z" fill="none" stroke="#3a1a2a" stroke-width="2.5" stroke-linejoin="round"/></svg>
+            <div class="pkg-img" style="background:linear-gradient(135deg,rgba(255,100,135,0.26),rgba(255,155,175,0.1))">
+              <svg width="44" height="44" viewBox="0 0 44 44" opacity="0.28"><path d="M22 3l5 12h13l-10 7 4 12-12-8-12 8 4-12-10-7h13z" fill="none" stroke="#3a1a2a" stroke-width="2.5" stroke-linejoin="round"/></svg>
               <div class="pkg-img-label">complete</div>
             </div>
             <div class="pkg-info">
-              <div class="pkg-top"><span class="pkg-name">wl package 4</span><span class="pkg-price">$139.99</span></div>
+              <div class="pkg-top"><span class="pkg-name">wl package 4</span><span class="pkg-price-tag">call for price</span></div>
               <div class="pkg-desc">complete weight loss and lifestyle overhaul.</div>
               <div class="pkg-detail-row" onclick="togglePkg('wl4','wla4')"><span class="pkg-detail-label">details</span><svg class="pkg-detail-arrow" id="wla4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <div class="pkg-detail-body" id="wl4"><div class="pkg-detail-inner"><div class="pkg-detail-item"><div class="pkg-bullet"></div>all wl packages combined</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>90-day dedicated specialist</div><div class="pkg-detail-item"><div class="pkg-bullet"></div>ongoing lifestyle coaching</div></div></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
 
   <div class="footer">hydrate solutions · 305-283-5447 · myhydratestation@gmail.com</div>
-
 </div>
 
 <script>
   // book dropdown
   const bookBtn = document.getElementById('bookBtn')
   const bookDropdown = document.getElementById('bookDropdown')
+  const bookChevron = document.getElementById('bookChevron')
   bookBtn.addEventListener('click', e => {
     e.stopPropagation()
-    bookBtn.classList.toggle('open')
-    bookDropdown.classList.toggle('open')
+    const isOpen = bookDropdown.classList.toggle('open')
+    bookChevron.classList.toggle('open', isOpen)
   })
   document.addEventListener('click', () => {
-    bookBtn.classList.remove('open')
     bookDropdown.classList.remove('open')
+    bookChevron.classList.remove('open')
   })
 
-  // section toggles
+  // section toggles — animate cards in when section opens
   function toggleSection(id) {
-    document.getElementById(id).classList.toggle('section-open')
+    const sec = document.getElementById(id)
+    const wasOpen = sec.classList.contains('section-open')
+    sec.classList.toggle('section-open')
+
+    if (!wasOpen) {
+      // stagger animate cards/peptides in
+      setTimeout(() => {
+        const cards = sec.querySelectorAll('.pkg-card, .peptide-card')
+        cards.forEach((c, i) => {
+          setTimeout(() => {
+            c.classList.add('visible')
+            c.style.animationDelay = '0s'
+          }, i * 45)
+        })
+      }, 80)
+    }
   }
 
-  // package detail toggles
+  // pkg detail toggles
   function togglePkg(bodyId, arrowId) {
     document.getElementById(bodyId).classList.toggle('open')
     document.getElementById(arrowId).classList.toggle('open')
@@ -521,64 +672,79 @@
 
   // generate 50 peptides
   const peptides = [
-    { name: 'BPC-157', use: 'gut healing, injury repair', price: '$45' },
-    { name: 'TB-500', use: 'tissue regeneration', price: '$55' },
-    { name: 'CJC-1295', use: 'growth hormone release', price: '$60' },
-    { name: 'Ipamorelin', use: 'anti-aging, fat loss', price: '$50' },
-    { name: 'AOD-9604', use: 'fat metabolism', price: '$48' },
-    { name: 'Semax', use: 'cognitive enhancement', price: '$52' },
-    { name: 'Selank', use: 'anxiety, focus', price: '$49' },
-    { name: 'PT-141', use: 'libido support', price: '$65' },
-    { name: 'DSIP', use: 'sleep improvement', price: '$44' },
-    { name: 'Epithalon', use: 'longevity, telomere support', price: '$58' },
-    { name: 'SS-31', use: 'mitochondrial health', price: '$70' },
-    { name: 'GHK-Cu', use: 'skin repair, anti-aging', price: '$46' },
-    { name: 'KPV', use: 'anti-inflammatory', price: '$42' },
-    { name: 'LL-37', use: 'immune defense', price: '$53' },
-    { name: 'MOTS-C', use: 'metabolic function', price: '$68' },
-    { name: 'Humanin', use: 'neuroprotection', price: '$64' },
-    { name: 'Sermorelin', use: 'GH secretagogue', price: '$57' },
-    { name: 'Hexarelin', use: 'muscle growth', price: '$61' },
-    { name: 'GHRP-2', use: 'growth hormone peptide', price: '$47' },
-    { name: 'GHRP-6', use: 'appetite, GH stimulation', price: '$47' },
-    { name: 'IGF-1 LR3', use: 'muscle building', price: '$75' },
-    { name: 'PEG-MGF', use: 'muscle repair', price: '$72' },
-    { name: 'Follistatin 344', use: 'muscle growth', price: '$80' },
-    { name: 'Thymosin Alpha-1', use: 'immune modulation', price: '$66' },
-    { name: 'Thymosin Beta-4', use: 'tissue healing', price: '$63' },
-    { name: 'VIP', use: 'inflammation, gut health', price: '$59' },
-    { name: 'Oxytocin', use: 'social bonding, recovery', price: '$54' },
-    { name: 'NAD+', use: 'cellular energy', price: '$85' },
-    { name: 'NMN', use: 'anti-aging', price: '$78' },
-    { name: 'Cerebrolysin', use: 'brain health', price: '$90' },
-    { name: 'Dihexa', use: 'cognitive performance', price: '$88' },
-    { name: 'NSI-189', use: 'neurogenesis', price: '$82' },
-    { name: 'PE-22-28', use: 'antidepressant effects', price: '$76' },
-    { name: 'P21', use: 'BDNF increase', price: '$74' },
-    { name: 'FGL', use: 'memory and learning', price: '$71' },
-    { name: 'Snap-8', use: 'wrinkle reduction', price: '$43' },
-    { name: 'Argireline', use: 'topical anti-aging', price: '$40' },
-    { name: 'Palmitoyl', use: 'skin collagen', price: '$41' },
-    { name: 'SHU-9119', use: 'appetite suppression', price: '$56' },
-    { name: 'Melanotan II', use: 'tanning, libido', price: '$62' },
-    { name: 'FOXO4-DRI', use: 'senolytic, longevity', price: '$95' },
-    { name: 'Carnosine', use: 'anti-glycation', price: '$38' },
-    { name: 'TA-65', use: 'telomere activation', price: '$92' },
-    { name: 'ARA-290', use: 'nerve repair', price: '$67' },
-    { name: 'Kisspeptin', use: 'hormonal balance', price: '$69' },
-    { name: 'Gonadorelin', use: 'testosterone support', price: '$73' },
-    { name: 'LGD-4', use: 'lean muscle', price: '$77' },
-    { name: 'Semaglutide', use: 'weight management, GLP-1', price: '$99' },
-    { name: 'Tirzepatide', use: 'dual GIP/GLP-1 agonist', price: '$105' },
-    { name: 'Retatrutide', use: 'triple agonist, fat loss', price: '$110' },
+    { name: 'BPC-157', use: 'gut healing, injury repair' },
+    { name: 'TB-500', use: 'tissue regeneration' },
+    { name: 'CJC-1295', use: 'growth hormone release' },
+    { name: 'Ipamorelin', use: 'anti-aging, fat loss' },
+    { name: 'AOD-9604', use: 'fat metabolism' },
+    { name: 'Semax', use: 'cognitive enhancement' },
+    { name: 'Selank', use: 'anxiety, focus' },
+    { name: 'PT-141', use: 'libido support' },
+    { name: 'DSIP', use: 'sleep improvement' },
+    { name: 'Epithalon', use: 'longevity, telomere support' },
+    { name: 'SS-31', use: 'mitochondrial health' },
+    { name: 'GHK-Cu', use: 'skin repair, anti-aging' },
+    { name: 'KPV', use: 'anti-inflammatory' },
+    { name: 'LL-37', use: 'immune defense' },
+    { name: 'MOTS-C', use: 'metabolic function' },
+    { name: 'Humanin', use: 'neuroprotection' },
+    { name: 'Sermorelin', use: 'GH secretagogue' },
+    { name: 'Hexarelin', use: 'muscle growth' },
+    { name: 'GHRP-2', use: 'growth hormone peptide' },
+    { name: 'GHRP-6', use: 'appetite, GH stimulation' },
+    { name: 'IGF-1 LR3', use: 'muscle building' },
+    { name: 'PEG-MGF', use: 'muscle repair' },
+    { name: 'Follistatin 344', use: 'muscle growth' },
+    { name: 'Thymosin Alpha-1', use: 'immune modulation' },
+    { name: 'Thymosin Beta-4', use: 'tissue healing' },
+    { name: 'VIP', use: 'inflammation, gut health' },
+    { name: 'Oxytocin', use: 'social bonding, recovery' },
+    { name: 'NAD+', use: 'cellular energy' },
+    { name: 'NMN', use: 'anti-aging' },
+    { name: 'Cerebrolysin', use: 'brain health' },
+    { name: 'Dihexa', use: 'cognitive performance' },
+    { name: 'NSI-189', use: 'neurogenesis' },
+    { name: 'PE-22-28', use: 'antidepressant effects' },
+    { name: 'P21', use: 'BDNF increase' },
+    { name: 'FGL', use: 'memory and learning' },
+    { name: 'Snap-8', use: 'wrinkle reduction' },
+    { name: 'Argireline', use: 'topical anti-aging' },
+    { name: 'Palmitoyl', use: 'skin collagen' },
+    { name: 'SHU-9119', use: 'appetite suppression' },
+    { name: 'Melanotan II', use: 'tanning, libido' },
+    { name: 'FOXO4-DRI', use: 'senolytic, longevity' },
+    { name: 'Carnosine', use: 'anti-glycation' },
+    { name: 'TA-65', use: 'telomere activation' },
+    { name: 'ARA-290', use: 'nerve repair' },
+    { name: 'Kisspeptin', use: 'hormonal balance' },
+    { name: 'Gonadorelin', use: 'testosterone support' },
+    { name: 'LGD-4', use: 'lean muscle' },
+    { name: 'Semaglutide', use: 'weight management, GLP-1' },
+    { name: 'Tirzepatide', use: 'dual GIP/GLP-1 agonist' },
+    { name: 'Retatrutide', use: 'triple agonist, fat loss' },
   ]
 
   const grid = document.getElementById('peptideGrid')
   peptides.forEach(p => {
     const c = document.createElement('div')
     c.className = 'peptide-card'
-    c.innerHTML = `<div class="peptide-name">${p.name}</div><div class="peptide-use">${p.use}</div><div class="peptide-price">${p.price}</div>`
+    c.innerHTML = `<div class="peptide-name">${p.name}</div><div class="peptide-use">${p.use}</div><div class="peptide-price">call for price</div>`
     grid.appendChild(c)
+  })
+
+  // scroll-triggered entrance for cards
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.animationPlayState = 'running'
+        observer.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('.card').forEach(c => {
+    c.style.animationPlayState = 'paused'
+    observer.observe(c)
   })
 </script>
 </body>
